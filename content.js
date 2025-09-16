@@ -84,35 +84,60 @@ async function exportCanvasCoursesToCSV() {
 }
 
 // UI injection: Adds Export Button To Bottom Right Hand Side of Screen.
+function injectButtonStyles() {
+  if (document.getElementById("cgx-btn-styles")) return;
+  const style = document.createElement("style");
+  style.id = "cgx-btn-styles";
+  style.textContent = `
+  .cgx-btn {
+  width: 100px;
+  height: 48px;
+  border: 2px solid #e21a00ff;
+  border-radius: 25px;
+  transition: all 0.3s;
+  cursor: pointer;
+  background: #e13f2a;
+  font-size: 0.9em;
+  font-weight: 600;
+  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #ffffffff;
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2147483647;
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  }
+
+  .cgx-btn:hover {
+  background: #e24d3a;
+  border: 4px solid #e1351eff;
+  font-size: 1em;
+  }`;
+  document.head.appendChild(style);
+}
+
 function makeButton() {
   const existing = document.getElementById("cgx-export-btn");
   if (existing) return existing;
 
+  injectButtonStyles();
+
   const btn = document.createElement("button");
   btn.id = "cgx-export-btn";
-  btn.textContent = "Extract Grades";
+  btn.className = "cgx-btn";
+  btn.textContent = "Export Grades";
   btn.title = "Download a CSV of your current course grades";
-  btn.style.cssText = [ // Button style
-    "position:fixed",
-    "right:16px",
-    "bottom:16px",
-    "z-index:2147483647",
-    "padding:10px 14px",
-    "border:none",
-    "border-radius:10px",
-    "box-shadow:0 4px 14px rgba(0,0,0,.2)",
-    "background:#e13f2a", // Color of Button
-    "color:#fff", // Font Color
-    "font-weight:600",
-    "font-size:14px",
-    "cursor:pointer"
-  ].join(";");
 
   // Checks for Button Activation
   btn.addEventListener("click", () => {
     btn.disabled = true;
     const oldText = btn.textContent;
-    btn.textContent = "Working…";
+    btn.textContent = "Exporting…";
     exportCanvasCoursesToCSV()
       .finally(() => {
         btn.disabled = false;
