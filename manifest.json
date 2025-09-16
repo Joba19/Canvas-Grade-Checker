@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Canvas Grades Exporter",
+  "description": "Adds an 'Extract Grades' button on the Canvas dashboard that downloads a CSV of your course grades.",
+  "version": "0.1.0",
+  "icons": {
+    "128": "Canvas-Grade-Exporter-Logo-V1.png"
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["https://*.instructure.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://*.instructure.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
